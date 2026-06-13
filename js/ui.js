@@ -72,7 +72,16 @@ function renderDots(state, totalRounds) {
   dots.innerHTML = html;
 }
 
-export function setPulseDisplay(value) {
+export function renderPulse(value, zone) {
   document.getElementById('pulse-value').textContent =
     value == null ? '--' : String(value);
+  const pane = document.getElementById('pulse-pane');
+  pane.classList.remove('zone-low', 'zone-in', 'zone-high');
+  if (zone && zone !== 'none') {
+    pane.classList.add('zone-' + zone);
+  }
+}
+
+export function setBluetoothStatus(text) {
+  document.getElementById('bt-status').textContent = text;
 }
