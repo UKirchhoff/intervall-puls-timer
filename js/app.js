@@ -1,13 +1,35 @@
 import { loadSettings, saveSettings } from './settings.js';
 import { createPlayer } from './sound.js';
 import { createTimer } from './timer.js';
+import { zoneFor, createAlarmArmer } from './pulseZones.js';
+import { createHeartRateSensor } from './heartRate.js';
 import {
   populateSoundSelects, renderSettings,
-  showScreen, renderActive, setPulseDisplay,
+  showScreen, renderActive, renderPulse, setBluetoothStatus,
 } from './ui.js';
 
 let settings = loadSettings(window.localStorage);
 const player = createPlayer(() => settings.volume);
+
+const alarmArmer = createAlarmArmer();
+let latestPulse = null;
+
+// Zentraler Verarbeitungspfad für jeden Pulswert (echt oder manuell).
+function applyPulse(value) {
+  latestPulse = value;
+  const zone = zoneFor(value, settings.pulseLower, settings.pulseUpper);
+  renderPulse(value, zone);
+  const crossed = alarmArmer.check(value, settings.pulseUpper);
+  const running = timer && timer.getState().status === 'running';
+  if (crossed && running && settings.sounds.pulseAlarm.enabled) {
+    player.play(settings.sounds.pulseAlarm.soundId);
+  }
+}
+
+const sensor = createHeartRateSensor({
+  onPulse: applyPulse,
+  onStatus: setBluetoothStatus,
+});
 
 function persistAndRender() {
   settings = saveSettings(settings, window.localStorage);
@@ -61,13 +83,18 @@ function initSettingsScreen() {
     settings.volume = Number(vol.value) / 100;
     settings = saveSettings(settings, window.localStorage);
   });
+
+  // Pulsgurt verbinden
+  document.getElementById('bt-connect').addEventListener('click', () => {
+    player.unlock(); // Nutzer-Geste: zugleich Audio freischalten
+    sensor.connect();
+  });
 }
 
 initSettingsScreen();
 
 let timer = null;
 let intervalId = null;
-let testPulse = null;
 
 function playEventSounds(events) {
   for (const ev of events) {
@@ -111,8 +138,8 @@ function startTraining() {
     pauseSec: settings.pauseSec,
   });
   timer.start();
-  testPulse = null;
-  setPulseDisplay(null);
+  alarmArmer.reset();
+  applyPulse(latestPulse); // aktuellen Puls (falls Gurt verbunden) sofort zeigen
   renderActive(timer.getState(), settings.rounds);
   showScreen('active');
   startLoop();
@@ -142,12 +169,11 @@ function initActiveScreen() {
     showScreen('settings');
   });
 
-  // Etappe 1: manueller Test-Puls
+  // Manueller Test-Puls (Etappe 1) – nutzt jetzt denselben Pfad wie der echte Gurt
   document.getElementById('pulse-test').addEventListener('input', (e) => {
     const v = e.target.value.trim();
     const n = Number(v);
-    testPulse = (v === '' || !Number.isFinite(n)) ? null : n;
-    setPulseDisplay(testPulse);
+    applyPulse((v === '' || !Number.isFinite(n)) ? null : n);
   });
 }
 
