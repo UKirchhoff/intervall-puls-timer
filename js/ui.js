@@ -35,3 +35,44 @@ export function renderSettings(s) {
 }
 
 export { formatTime };
+
+export function showScreen(which) {
+  document.getElementById('screen-settings').classList.toggle('hidden', which !== 'settings');
+  document.getElementById('screen-active').classList.toggle('hidden', which !== 'active');
+}
+
+export function renderActive(state, totalRounds) {
+  const pill = document.getElementById('phase-pill');
+  const countdown = document.getElementById('countdown');
+  const pane = document.getElementById('timer-pane');
+
+  if (state.status === 'finished') {
+    pill.textContent = 'FERTIG';
+    countdown.textContent = '✓';
+    pane.classList.remove('phase-pause');
+  } else {
+    const label = state.phase === 'training' ? 'TRAINING' : 'PAUSE';
+    pill.textContent = `${label} · ${state.round}/${totalRounds}`;
+    countdown.textContent = formatTime(Math.max(0, state.remaining));
+    pane.classList.toggle('phase-pause', state.phase === 'pause');
+  }
+
+  renderDots(state, totalRounds);
+}
+
+function renderDots(state, totalRounds) {
+  const dots = document.getElementById('round-dots');
+  let html = '';
+  for (let i = 1; i <= totalRounds; i++) {
+    let cls = '';
+    if (i < state.round || state.status === 'finished') cls = 'done';
+    else if (i === state.round) cls = 'current';
+    html += `<span class="${cls}">●</span> `;
+  }
+  dots.innerHTML = html;
+}
+
+export function setPulseDisplay(value) {
+  document.getElementById('pulse-value').textContent =
+    value == null ? '--' : String(value);
+}
