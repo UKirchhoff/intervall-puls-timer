@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Intervall-Timer</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <!-- Bildschirm 1: Einstellungen -->
+  <main id="screen-settings" class="screen">
+    <h1>Intervall-Timer</h1>
+
+    <section class="group">
+      <h2>Ablauf</h2>
+      <div class="row">
+        <div class="row-label">Runden</div>
+        <div class="stepper">
+          <button class="step" data-step="rounds" data-delta="-1">−</button>
+          <span class="val" id="val-rounds">10</span>
+          <button class="step" data-step="rounds" data-delta="1">+</button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="row-label">Training</div>
+        <div class="stepper">
+          <button class="step" data-step="trainingSec" data-delta="-5">−</button>
+          <span class="val" id="val-trainingSec">00:40</span>
+          <button class="step" data-step="trainingSec" data-delta="5">+</button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="row-label">Pause</div>
+        <div class="stepper">
+          <button class="step" data-step="pauseSec" data-delta="-5">−</button>
+          <span class="val" id="val-pauseSec">00:20</span>
+          <button class="step" data-step="pauseSec" data-delta="5">+</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="group">
+      <h2>Pulszonen</h2>
+      <div class="row">
+        <div class="row-label">Untergrenze</div>
+        <div class="stepper">
+          <button class="step" data-step="pulseLower" data-delta="-5">−</button>
+          <span class="val zone-low" id="val-pulseLower">110</span>
+          <button class="step" data-step="pulseLower" data-delta="5">+</button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="row-label">Obergrenze</div>
+        <div class="stepper">
+          <button class="step" data-step="pulseUpper" data-delta="-5">−</button>
+          <span class="val zone-high" id="val-pulseUpper">150</span>
+          <button class="step" data-step="pulseUpper" data-delta="5">+</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="group">
+      <h2>Signaltöne</h2>
+      <div class="sound-row" data-sound="phaseChange">
+        <div class="sound-top">
+          <span class="row-label">Phasenwechsel-Ton</span>
+          <button class="toggle" data-toggle="phaseChange" aria-pressed="true"></button>
+        </div>
+        <div class="sound-ctl">
+          <select class="sound-select" data-select="phaseChange"></select>
+          <button class="preview" data-preview="phaseChange">▶</button>
+        </div>
+      </div>
+      <div class="sound-row" data-sound="countdown">
+        <div class="sound-top">
+          <span class="row-label">Countdown-Piepser (3-2-1)</span>
+          <button class="toggle" data-toggle="countdown" aria-pressed="true"></button>
+        </div>
+        <div class="sound-ctl">
+          <select class="sound-select" data-select="countdown"></select>
+          <button class="preview" data-preview="countdown">▶</button>
+        </div>
+      </div>
+      <div class="sound-row" data-sound="pulseAlarm">
+        <div class="sound-top">
+          <span class="row-label">Puls-Alarm</span>
+          <button class="toggle" data-toggle="pulseAlarm" aria-pressed="true"></button>
+        </div>
+        <div class="sound-ctl">
+          <select class="sound-select" data-select="pulseAlarm"></select>
+          <button class="preview" data-preview="pulseAlarm">▶</button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="row-label">Lautstärke</div>
+        <input type="range" id="val-volume" min="0" max="100" value="70" />
+      </div>
+    </section>
+
+    <button id="start-btn" class="primary-btn">▶ Training starten</button>
+  </main>
+
+  <!-- Bildschirm 2: Training aktiv -->
+  <main id="screen-active" class="screen hidden">
+    <div class="dots" id="round-dots"></div>
+    <div class="active-body">
+      <div class="pulse-pane" id="pulse-pane">
+        <div class="heart">♥</div>
+        <div class="pulse-value" id="pulse-value">--</div>
+        <div class="pulse-unit">bpm</div>
+        <!-- Etappe 1: Test-Wert manuell setzen -->
+        <input type="number" id="pulse-test" class="pulse-test" placeholder="Test-Puls" />
+      </div>
+      <div class="timer-pane" id="timer-pane">
+        <div class="phase-pill" id="phase-pill">TRAINING · 1/10</div>
+        <div class="countdown" id="countdown">00:40</div>
+      </div>
+    </div>
+    <div class="active-controls">
+      <button id="pause-btn" class="secondary-btn">Pause</button>
+      <button id="stop-btn" class="secondary-btn">Beenden</button>
+    </div>
+  </main>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

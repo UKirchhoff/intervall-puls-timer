@@ -1,0 +1,98 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  font-family: -apple-system, system-ui, sans-serif;
+  background: #0f1115;
+  color: #e8eaed;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.screen { min-height: 100%; padding: 20px; max-width: 760px; margin: 0 auto; }
+.hidden { display: none !important; }
+h1 { font-size: 26px; margin-bottom: 14px; }
+.group { margin-bottom: 18px; }
+.group h2 {
+  font-size: 12px; text-transform: uppercase; letter-spacing: 1px;
+  color: #7681f0; margin: 14px 4px 6px;
+}
+.row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 4px; border-bottom: 1px solid #20242d;
+}
+.row-label { font-size: 16px; }
+.stepper { display: flex; align-items: center; gap: 14px; }
+.step {
+  width: 44px; height: 44px; border-radius: 10px;
+  background: #1b2029; border: 1px solid #2f3744; color: #cfd3da; font-size: 22px;
+}
+.val { font-size: 24px; font-weight: 800; min-width: 92px; text-align: center; }
+.zone-low { color: #f5d020; }
+.zone-high { color: #ff4d5e; }
+
+.sound-row { padding: 12px 4px; border-bottom: 1px solid #20242d; }
+.sound-top { display: flex; align-items: center; justify-content: space-between; }
+.toggle {
+  width: 52px; height: 30px; border-radius: 999px; background: #2e7d46;
+  border: none; position: relative;
+}
+.toggle::after {
+  content: ""; position: absolute; top: 3px; right: 3px;
+  width: 24px; height: 24px; border-radius: 50%; background: #fff;
+}
+.toggle[aria-pressed="false"] { background: #3a3f4a; }
+.toggle[aria-pressed="false"]::after { right: auto; left: 3px; }
+.sound-ctl { display: flex; gap: 10px; margin-top: 10px; }
+.sound-select {
+  flex: 1; background: #1b2029; border: 1px solid #2f3744; border-radius: 10px;
+  padding: 10px 12px; color: #e8eaed; font-size: 15px;
+}
+.preview {
+  width: 44px; height: 44px; border-radius: 10px;
+  background: #1f3a8a; border: 1px solid #2f4db0; color: #dfe4ff; font-size: 16px;
+}
+#val-volume { width: 200px; }
+
+.primary-btn {
+  margin-top: 22px; width: 100%; padding: 18px; border: none; border-radius: 14px;
+  background: #2e7d46; color: #fff; font-size: 22px; font-weight: 800;
+}
+
+/* --- Aktiver Bildschirm (Layout C) --- */
+#screen-active { display: flex; flex-direction: column; max-width: none; padding: 16px; }
+.dots {
+  text-align: center; letter-spacing: 4px; color: #3a4150;
+  font-size: 22px; margin-bottom: 10px; min-height: 26px;
+}
+.dots .done { color: #5fd07a; }
+.dots .current { color: #ffffff; }
+.active-body { flex: 1; display: flex; gap: 12px; }
+.pulse-pane, .timer-pane {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; border-radius: 16px;
+}
+.pulse-pane { background: #15181f; }
+.heart { color: #ff5a6e; font-size: 48px; }
+.pulse-value { font-size: 120px; font-weight: 800; line-height: 1; }
+.pulse-unit { font-size: 14px; color: #9aa0aa; text-transform: uppercase; letter-spacing: 1px; }
+.pulse-test {
+  margin-top: 16px; width: 140px; padding: 8px; text-align: center;
+  background: #1b2029; border: 1px solid #2f3744; border-radius: 8px; color: #e8eaed; font-size: 16px;
+}
+.timer-pane { background: #13301c; transition: background 0.3s; }
+.timer-pane.phase-pause { background: #3a2410; }
+.phase-pill {
+  padding: 6px 16px; border-radius: 999px; background: rgba(255,255,255,0.12);
+  font-size: 16px; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 12px;
+}
+.countdown { font-size: 140px; font-weight: 800; line-height: 1; color: #7fe39a; }
+.timer-pane.phase-pause .countdown { color: #ffb877; }
+.active-controls { display: flex; gap: 12px; margin-top: 12px; }
+.secondary-btn {
+  flex: 1; padding: 16px; border-radius: 12px; border: 1px solid #2f3744;
+  background: #1b2029; color: #e8eaed; font-size: 18px; font-weight: 700;
+}
+
+@media (orientation: landscape) {
+  .pulse-value { font-size: 150px; }
+  .countdown { font-size: 170px; }
+}
