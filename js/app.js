@@ -92,6 +92,7 @@ function onTick() {
 }
 
 function startLoop() {
+  if (intervalId !== null) return;
   intervalId = window.setInterval(onTick, 1000);
 }
 
@@ -144,7 +145,8 @@ function initActiveScreen() {
   // Etappe 1: manueller Test-Puls
   document.getElementById('pulse-test').addEventListener('input', (e) => {
     const v = e.target.value.trim();
-    testPulse = v === '' ? null : Number(v);
+    const n = Number(v);
+    testPulse = (v === '' || !Number.isFinite(n)) ? null : n;
     setPulseDisplay(testPulse);
   });
 }
