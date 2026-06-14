@@ -118,6 +118,18 @@ h1 { font-size: 26px; margin-bottom: 14px; }
 .timer-pane.phase-prepare { background: #10243a; }
 .timer-pane.phase-prepare .countdown { color: #7fb8ff; }
 
+/* --- Trainings-/Pausen-Figur (aktiver Bildschirm) --- */
+.figure-area { display: flex; justify-content: center; margin-bottom: 6px; min-height: 0; }
+.figure-svg { height: 76px; width: auto; }
+.figure-svg line, .figure-svg polyline {
+  stroke: #e8eaed; fill: none; stroke-width: 8; stroke-linecap: round; stroke-linejoin: round;
+}
+.figure-svg .headFill { fill: #e8eaed; stroke: none; }
+#fig-train { transform-origin: 50% 92%; animation: fig-bob 1.2s ease-in-out infinite; }
+#fig-rest { transform-origin: 50% 92%; animation: fig-breathe 3s ease-in-out infinite; }
+@keyframes fig-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+@keyframes fig-breathe { 0%, 100% { transform: scaleY(1); } 50% { transform: scaleY(1.04); } }
+
 /* --- Verlauf-Bildschirm --- */
 .full-btn { width: 100%; margin-top: 12px; }
 .history-list { margin: 8px 0 16px; }

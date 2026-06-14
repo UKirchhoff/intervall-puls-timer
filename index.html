@@ -132,6 +132,34 @@
         <input type="number" id="pulse-test" class="pulse-test" placeholder="Test-Puls" />
       </div>
       <div class="timer-pane" id="timer-pane">
+        <div class="figure-area">
+          <svg id="fig-train" class="figure-svg" viewBox="0 0 100 150" aria-hidden="true">
+            <circle class="headFill" cx="50" cy="17" r="10" />
+            <line x1="50" y1="29" x2="50" y2="80" />
+            <polyline points="45,80 41,114 39,144" />
+            <polyline points="55,80 59,114 61,144" />
+            <g>
+              <polyline points="46,42 40,62 35,82" />
+              <animateTransform attributeName="transform" type="rotate"
+                values="0 46 42; -110 46 42; 0 46 42" keyTimes="0;0.5;1"
+                dur="1.2s" repeatCount="indefinite" />
+            </g>
+            <g>
+              <polyline points="54,42 60,62 65,82" />
+              <animateTransform attributeName="transform" type="rotate"
+                values="0 54 42; 110 54 42; 0 54 42" keyTimes="0;0.5;1"
+                dur="1.2s" repeatCount="indefinite" />
+            </g>
+          </svg>
+          <svg id="fig-rest" class="figure-svg hidden" viewBox="0 0 100 150" aria-hidden="true">
+            <circle class="headFill" cx="50" cy="17" r="10" />
+            <line x1="50" y1="29" x2="50" y2="80" />
+            <polyline points="45,80 41,114 39,144" />
+            <polyline points="55,80 59,114 61,144" />
+            <polyline points="46,42 40,62 35,82" />
+            <polyline points="54,42 60,62 65,82" />
+          </svg>
+        </div>
         <div class="phase-pill" id="phase-pill">TRAINING · 1/10</div>
         <div class="countdown" id="countdown">00:40</div>
       </div>

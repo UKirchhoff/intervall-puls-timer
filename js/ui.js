@@ -60,6 +60,14 @@ export function renderActive(state, totalRounds) {
     else if (state.phase === 'prepare') pane.classList.add('phase-prepare');
   }
 
+  const figTrain = document.getElementById('fig-train');
+  const figRest = document.getElementById('fig-rest');
+  const showTrain = state.status !== 'finished' && state.phase === 'training';
+  const showRest =
+    state.status !== 'finished' && (state.phase === 'pause' || state.phase === 'prepare');
+  figTrain.classList.toggle('hidden', !showTrain);
+  figRest.classList.toggle('hidden', !showRest);
+
   renderDots(state, totalRounds);
 }
 
