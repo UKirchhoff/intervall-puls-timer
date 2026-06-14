@@ -113,3 +113,15 @@ h1 { font-size: 26px; margin-bottom: 14px; }
 .pulse-pane.zone-high .pulse-value { color: #ff4d5e; }
 .pulse-pane.zone-low .pulse-unit { color: #f5d020; }
 .pulse-pane.zone-high .pulse-unit { color: #ff4d5e; }
+
+/* --- Vorbereitungs-Phase (aktiver Bildschirm) --- */
+.timer-pane.phase-prepare { background: #10243a; }
+.timer-pane.phase-prepare .countdown { color: #7fb8ff; }
+
+/* --- Verlauf-Bildschirm --- */
+.full-btn { width: 100%; margin-top: 12px; }
+.history-list { margin: 8px 0 16px; }
+.history-empty { color: #9aa0aa; padding: 20px 4px; }
+.history-item { padding: 12px 4px; border-bottom: 1px solid #20242d; }
+.history-when { font-size: 15px; font-weight: 700; }
+.history-meta { font-size: 13px; color: #9aa0aa; margin-top: 3px; }

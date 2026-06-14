@@ -20,6 +20,7 @@ export function populateSoundSelects() {
 
 export function renderSettings(s) {
   document.getElementById('val-rounds').textContent = String(s.rounds);
+  document.getElementById('val-prepareSec').textContent = formatTime(s.prepareSec);
   document.getElementById('val-trainingSec').textContent = formatTime(s.trainingSec);
   document.getElementById('val-pauseSec').textContent = formatTime(s.pauseSec);
   document.getElementById('val-pulseLower').textContent = String(s.pulseLower);
@@ -37,8 +38,9 @@ export function renderSettings(s) {
 export { formatTime };
 
 export function showScreen(which) {
-  document.getElementById('screen-settings').classList.toggle('hidden', which !== 'settings');
-  document.getElementById('screen-active').classList.toggle('hidden', which !== 'active');
+  for (const name of ['settings', 'active', 'history']) {
+    document.getElementById('screen-' + name).classList.toggle('hidden', name !== which);
+  }
 }
 
 export function renderActive(state, totalRounds) {
@@ -46,15 +48,16 @@ export function renderActive(state, totalRounds) {
   const countdown = document.getElementById('countdown');
   const pane = document.getElementById('timer-pane');
 
+  pane.classList.remove('phase-pause', 'phase-prepare');
   if (state.status === 'finished') {
     pill.textContent = 'FERTIG';
     countdown.textContent = '✓';
-    pane.classList.remove('phase-pause');
   } else {
-    const label = state.phase === 'training' ? 'TRAINING' : 'PAUSE';
-    pill.textContent = `${label} · ${state.round}/${totalRounds}`;
+    const labels = { prepare: 'BEREIT MACHEN', training: 'TRAINING', pause: 'PAUSE' };
+    pill.textContent = `${labels[state.phase]} · ${state.round}/${totalRounds}`;
     countdown.textContent = formatTime(Math.max(0, state.remaining));
-    pane.classList.toggle('phase-pause', state.phase === 'pause');
+    if (state.phase === 'pause') pane.classList.add('phase-pause');
+    else if (state.phase === 'prepare') pane.classList.add('phase-prepare');
   }
 
   renderDots(state, totalRounds);
@@ -84,4 +87,30 @@ export function renderPulse(value, zone) {
 
 export function setBluetoothStatus(text) {
   document.getElementById('bt-status').textContent = text;
+}
+
+function formatDateTime(iso) {
+  const d = new Date(iso);
+  if (isNaN(d.getTime())) return '—';
+  const pad = (n) => String(n).padStart(2, '0');
+  return `${pad(d.getDate())}.${pad(d.getMonth() + 1)}.${d.getFullYear()}, ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+
+export function renderHistory(entries) {
+  const el = document.getElementById('history-list');
+  if (!entries || entries.length === 0) {
+    el.innerHTML = '<div class="history-empty">Noch keine Trainings aufgezeichnet.</div>';
+    return;
+  }
+  el.innerHTML = entries
+    .map((e) => {
+      const when = formatDateTime(e.dateISO);
+      const dur = formatTime(e.durationSec);
+      const puls = e.avgPulse == null ? 'Puls —' : `ø ${e.avgPulse} · max ${e.maxPulse}`;
+      return `<div class="history-item">
+      <div class="history-when">${when}</div>
+      <div class="history-meta">${e.rounds} Runden · ${dur} · ${puls}</div>
+    </div>`;
+    })
+    .join('');
 }

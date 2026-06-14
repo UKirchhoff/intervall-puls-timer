@@ -1,5 +1,6 @@
 export const DEFAULT_SETTINGS = {
   rounds: 10,
+  prepareSec: 10,
   trainingSec: 40,
   pauseSec: 20,
   pulseLower: 110,
@@ -23,6 +24,7 @@ function clampInt(value, min, max, fallback) {
 export function clampSettings(input) {
   const s = { ...DEFAULT_SETTINGS, ...(input || {}) };
   const rounds = clampInt(s.rounds, 1, 99, DEFAULT_SETTINGS.rounds);
+  const prepareSec = clampInt(s.prepareSec, 0, 3599, DEFAULT_SETTINGS.prepareSec);
   const trainingSec = clampInt(s.trainingSec, 1, 3599, DEFAULT_SETTINGS.trainingSec);
   const pauseSec = clampInt(s.pauseSec, 0, 3599, DEFAULT_SETTINGS.pauseSec);
   let pulseLower = clampInt(s.pulseLower, 30, 250, DEFAULT_SETTINGS.pulseLower);
@@ -42,7 +44,7 @@ export function clampSettings(input) {
   };
 
   return {
-    rounds, trainingSec, pauseSec, pulseLower, pulseUpper, volume,
+    rounds, prepareSec, trainingSec, pauseSec, pulseLower, pulseUpper, volume,
     sounds: {
       phaseChange: mergeSound('phaseChange'),
       countdown: mergeSound('countdown'),

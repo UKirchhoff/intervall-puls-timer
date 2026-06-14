@@ -1,6 +1,8 @@
-# Intervall-Timer (Etappe 2)
+# Intervall-Timer
 
-Web-App: Intervall-Trainings-Timer mit einstellbaren Runden/Zeiten, konfigurierbaren Signaltönen und Puls vom Bluetooth-Brustgurt mit Pulszonen-Anzeige.
+Web-App: Intervall-Trainings-Timer mit einstellbaren Runden/Zeiten, optionaler Vorbereitungs-Phase, konfigurierbaren Signaltönen, Puls vom Bluetooth-Brustgurt mit Pulszonen-Anzeige und Trainings-Verlauf.
+
+Live: https://ukirchhoff.github.io/intervall-puls-timer/
 
 ## Starten (zum Testen am PC)
 1. `npm install`
@@ -27,6 +29,15 @@ ertönt einmalig der Puls-Alarm (während eines laufenden Trainings, falls aktiv
 Während eines laufenden Trainings (inkl. Pause) bleibt der Bildschirm an
 (Screen Wake Lock). Beim Beenden oder am Trainingsende wird er wieder freigegeben.
 Funktioniert in Browsern mit Wake-Lock-Unterstützung (u. a. Bluefy auf iPadOS 16.4+).
+
+## Vorbereitung
+Optionale „Vorbereitung"-Zeit (Einstellungen, Standard 10 s, 0 = aus) läuft einmal vor
+Runde 1 als eigene Phase (blau) mit 3-2-1-Piepser, dann startet Training Runde 1.
+
+## Trainings-Verlauf
+„Verlauf ansehen" in den Einstellungen zeigt abgeschlossene Trainings (Datum, Runden,
+Dauer, Ø- und Max-Puls). Lokal gespeichert, neueste zuerst, max. 50 Einträge,
+„Alle löschen" mit Rückfrage. Aufgezeichnet wird nur bei vollständig beendetem Training.
 
 ## Tests
 `npm test`

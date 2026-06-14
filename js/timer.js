@@ -2,13 +2,21 @@ export function createTimer(config) {
   const rounds = config.rounds;
   const trainingSec = config.trainingSec;
   const pauseSec = config.pauseSec;
+  const prepareSec = config.prepareSec || 0;
 
-  let state = {
-    status: 'idle', // 'idle' | 'running' | 'paused' | 'finished'
-    phase: 'training', // 'training' | 'pause'
-    round: 1,
-    remaining: trainingSec,
-  };
+  let state = prepareSec > 0
+    ? {
+        status: 'idle', // 'idle' | 'running' | 'paused' | 'finished'
+        phase: 'prepare', // 'prepare' | 'training' | 'pause'
+        round: 1,
+        remaining: prepareSec,
+      }
+    : {
+        status: 'idle',
+        phase: 'training',
+        round: 1,
+        remaining: trainingSec,
+      };
 
   function getState() {
     return { ...state };
@@ -29,6 +37,12 @@ export function createTimer(config) {
   }
 
   function advancePhase(events) {
+    if (state.phase === 'prepare') {
+      state.phase = 'training';
+      state.remaining = trainingSec;
+      events.push({ type: 'phaseChange', to: 'training', round: state.round });
+      return;
+    }
     if (state.phase === 'training' && pauseSec > 0) {
       state.phase = 'pause';
       state.remaining = pauseSec;

@@ -14,6 +14,14 @@
     <section class="group">
       <h2>Ablauf</h2>
       <div class="row">
+        <div class="row-label">Vorbereitung</div>
+        <div class="stepper">
+          <button class="step" data-step="prepareSec" data-delta="-5">−</button>
+          <span class="val" id="val-prepareSec">00:10</span>
+          <button class="step" data-step="prepareSec" data-delta="5">+</button>
+        </div>
+      </div>
+      <div class="row">
         <div class="row-label">Runden</div>
         <div class="stepper">
           <button class="step" data-step="rounds" data-delta="-1">−</button>
@@ -109,6 +117,7 @@
     </section>
 
     <button id="start-btn" class="primary-btn">▶ Training starten</button>
+    <button id="history-btn" class="secondary-btn full-btn">Verlauf ansehen</button>
   </main>
 
   <!-- Bildschirm 2: Training aktiv -->
@@ -130,6 +139,16 @@
     <div class="active-controls">
       <button id="pause-btn" class="secondary-btn">Pause</button>
       <button id="stop-btn" class="secondary-btn">Beenden</button>
+    </div>
+  </main>
+
+  <!-- Bildschirm 3: Verlauf -->
+  <main id="screen-history" class="screen hidden">
+    <h1>Verlauf</h1>
+    <div id="history-list" class="history-list"></div>
+    <div class="active-controls">
+      <button id="history-back" class="secondary-btn">Zurück</button>
+      <button id="history-clear" class="secondary-btn">Alle löschen</button>
     </div>
   </main>
 

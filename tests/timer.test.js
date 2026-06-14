@@ -88,3 +88,33 @@ describe('Übergänge & Ereignisse', () => {
     expect(t.getState().remaining).toBe(1);
   });
 });
+
+describe('Vorbereitungs-Phase', () => {
+  it('startet in der Vorbereitung, wenn prepareSec > 0', () => {
+    const t = createTimer({ rounds: 2, trainingSec: 3, pauseSec: 2, prepareSec: 5 });
+    expect(t.getState()).toEqual({
+      status: 'idle', phase: 'prepare', round: 1, remaining: 5,
+    });
+  });
+
+  it('startet direkt im Training, wenn prepareSec 0/fehlt', () => {
+    const t = createTimer({ rounds: 1, trainingSec: 3, pauseSec: 0 });
+    expect(t.getState().phase).toBe('training');
+  });
+
+  it('wechselt nach der Vorbereitung in Runde 1 Training (ohne Runde zu erhöhen)', () => {
+    const t = createTimer({ rounds: 2, trainingSec: 3, pauseSec: 2, prepareSec: 2 });
+    t.start();
+    const ev = tickN(t, 2); // 2->1->0 => Training
+    expect(ev).toContainEqual({ type: 'phaseChange', to: 'training', round: 1 });
+    expect(t.getState()).toMatchObject({ phase: 'training', round: 1, remaining: 3 });
+  });
+
+  it('piepst 3-2-1 auch in der Vorbereitung', () => {
+    const t = createTimer({ rounds: 1, trainingSec: 3, pauseSec: 0, prepareSec: 4 });
+    t.start();
+    const ev = tickN(t, 3); // 4->3->2->1
+    const counts = ev.filter((e) => e.type === 'countdown').map((e) => e.value);
+    expect(counts).toEqual([3, 2, 1]);
+  });
+});

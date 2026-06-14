@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(bash scripts/start-server.sh --project-dir \"C:/Users/Uwe/OneDrive - Uwe Kirchhoff/Projekte/claude/Traings App\")",
+      "WebSearch",
+      "PowerShell(npm *)",
+      "PowerShell(New-Item *)"
+    ]
+  }
+}

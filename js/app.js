@@ -4,9 +4,10 @@ import { createTimer } from './timer.js';
 import { zoneFor, createAlarmArmer } from './pulseZones.js';
 import { createHeartRateSensor } from './heartRate.js';
 import { createWakeLock } from './wakeLock.js';
+import { loadHistory, addEntry, clearHistory, pulseStats } from './history.js';
 import {
   populateSoundSelects, renderSettings,
-  showScreen, renderActive, renderPulse, setBluetoothStatus,
+  showScreen, renderActive, renderPulse, setBluetoothStatus, renderHistory,
 } from './ui.js';
 
 let settings = loadSettings(window.localStorage);
@@ -15,6 +16,7 @@ const wakeLock = createWakeLock();
 
 const alarmArmer = createAlarmArmer();
 let latestPulse = null;
+let pulseSamples = [];
 
 // Zentraler Verarbeitungspfad für jeden Pulswert (echt oder manuell).
 function applyPulse(value) {
@@ -23,6 +25,9 @@ function applyPulse(value) {
   renderPulse(value, zone);
   const crossed = alarmArmer.check(value, settings.pulseUpper);
   const running = timer && timer.getState().status === 'running';
+  if (running && Number.isFinite(value)) {
+    pulseSamples.push(value);
+  }
   if (crossed && running && settings.sounds.pulseAlarm.enabled) {
     player.play(settings.sounds.pulseAlarm.soundId);
   }
@@ -120,6 +125,7 @@ function onTick() {
   if (state.status === 'finished') {
     stopLoop();
     wakeLock.disable();
+    recordTraining();
   }
 }
 
@@ -135,15 +141,32 @@ function stopLoop() {
   }
 }
 
+function recordTraining() {
+  const stats = pulseStats(pulseSamples);
+  const durationSec =
+    settings.prepareSec +
+    settings.rounds * settings.trainingSec +
+    settings.rounds * settings.pauseSec;
+  addEntry(window.localStorage, {
+    dateISO: new Date().toISOString(),
+    rounds: settings.rounds,
+    durationSec,
+    avgPulse: stats.avg,
+    maxPulse: stats.max,
+  });
+}
+
 function startTraining() {
   player.unlock(); // iOS-Audiofreigabe per Start-Geste
   timer = createTimer({
     rounds: settings.rounds,
     trainingSec: settings.trainingSec,
     pauseSec: settings.pauseSec,
+    prepareSec: settings.prepareSec,
   });
   timer.start();
   alarmArmer.reset();
+  pulseSamples = [];
   applyPulse(latestPulse); // aktuellen Puls (falls Gurt verbunden) sofort zeigen
   renderActive(timer.getState(), settings.rounds);
   showScreen('active');
@@ -185,3 +208,21 @@ function initActiveScreen() {
 }
 
 initActiveScreen();
+
+function initHistoryScreen() {
+  document.getElementById('history-btn').addEventListener('click', () => {
+    renderHistory(loadHistory(window.localStorage));
+    showScreen('history');
+  });
+  document.getElementById('history-back').addEventListener('click', () => {
+    showScreen('settings');
+  });
+  document.getElementById('history-clear').addEventListener('click', () => {
+    if (window.confirm('Wirklich den gesamten Verlauf löschen?')) {
+      clearHistory(window.localStorage);
+      renderHistory([]);
+    }
+  });
+}
+
+initHistoryScreen();

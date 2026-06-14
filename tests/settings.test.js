@@ -4,6 +4,7 @@ import { DEFAULT_SETTINGS, clampSettings, loadSettings, saveSettings } from '../
 describe('DEFAULT_SETTINGS', () => {
   it('hat sinnvolle Startwerte', () => {
     expect(DEFAULT_SETTINGS.rounds).toBe(10);
+    expect(DEFAULT_SETTINGS.prepareSec).toBe(10);
     expect(DEFAULT_SETTINGS.trainingSec).toBe(40);
     expect(DEFAULT_SETTINGS.pauseSec).toBe(20);
     expect(DEFAULT_SETTINGS.pulseLower).toBe(110);
@@ -18,6 +19,10 @@ describe('DEFAULT_SETTINGS', () => {
 describe('clampSettings', () => {
   it('begrenzt Runden auf mindestens 1', () => {
     expect(clampSettings({ rounds: 0 }).rounds).toBe(1);
+  });
+  it('erlaubt Vorbereitung 0, begrenzt negativ auf 0', () => {
+    expect(clampSettings({ prepareSec: 0 }).prepareSec).toBe(0);
+    expect(clampSettings({ prepareSec: -5 }).prepareSec).toBe(0);
   });
   it('erlaubt Pause 0, aber Training mindestens 1', () => {
     expect(clampSettings({ pauseSec: 0 }).pauseSec).toBe(0);
