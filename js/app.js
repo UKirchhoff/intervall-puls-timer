@@ -3,6 +3,7 @@ import { createPlayer } from './sound.js';
 import { createTimer } from './timer.js';
 import { zoneFor, createAlarmArmer } from './pulseZones.js';
 import { createHeartRateSensor } from './heartRate.js';
+import { createWakeLock } from './wakeLock.js';
 import {
   populateSoundSelects, renderSettings,
   showScreen, renderActive, renderPulse, setBluetoothStatus,
@@ -10,6 +11,7 @@ import {
 
 let settings = loadSettings(window.localStorage);
 const player = createPlayer(() => settings.volume);
+const wakeLock = createWakeLock();
 
 const alarmArmer = createAlarmArmer();
 let latestPulse = null;
@@ -115,7 +117,10 @@ function onTick() {
   playEventSounds(events);
   const state = timer.getState();
   renderActive(state, settings.rounds);
-  if (state.status === 'finished') stopLoop();
+  if (state.status === 'finished') {
+    stopLoop();
+    wakeLock.disable();
+  }
 }
 
 function startLoop() {
@@ -142,6 +147,7 @@ function startTraining() {
   applyPulse(latestPulse); // aktuellen Puls (falls Gurt verbunden) sofort zeigen
   renderActive(timer.getState(), settings.rounds);
   showScreen('active');
+  wakeLock.enable();
   startLoop();
 }
 
@@ -164,6 +170,7 @@ function initActiveScreen() {
 
   document.getElementById('stop-btn').addEventListener('click', () => {
     stopLoop();
+    wakeLock.disable();
     if (timer) timer.stop();
     document.getElementById('pause-btn').textContent = 'Pause';
     showScreen('settings');

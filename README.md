@@ -23,5 +23,10 @@ Untergrenze/Obergrenze in den Einstellungen festlegen. Anzeige: unter der Unterg
 gelb, im Zielbereich weiß, über der Obergrenze rot. Beim Überschreiten der Obergrenze
 ertönt einmalig der Puls-Alarm (während eines laufenden Trainings, falls aktiviert).
 
+## Bildschirm wach halten
+Während eines laufenden Trainings (inkl. Pause) bleibt der Bildschirm an
+(Screen Wake Lock). Beim Beenden oder am Trainingsende wird er wieder freigegeben.
+Funktioniert in Browsern mit Wake-Lock-Unterstützung (u. a. Bluefy auf iPadOS 16.4+).
+
 ## Tests
 `npm test`
